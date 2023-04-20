@@ -238,27 +238,28 @@ class DISH:
                 for i in wS:
                     wSsum += i
 
-                meanS_F1 = 0
-                meanS_F2 = 0
-                meanS_CR1 = 0
-                meanS_CR2 = 0
+                if wSsum != 0.:
 
-                for s in range(len(self.S_F)):
-                    meanS_F1 += (wS[s] / wSsum) * self.S_F[s] * self.S_F[s]
-                    meanS_F2 += (wS[s] / wSsum) * self.S_F[s]
-                    meanS_CR1 += (wS[s] / wSsum) * self.S_CR[s] * self.S_CR[s]
-                    meanS_CR2 += (wS[s] / wSsum) * self.S_CR[s]
-                
-                if (k < self.H-1):
-                    self.M_F[k] = (meanS_F1 / meanS_F2)
-                    if meanS_CR2 != 0:
-                        self.M_CR[k] = (meanS_CR1 / meanS_CR2)
-                    else:
-                        self.M_CR[k] = 0
+                    meanS_F1 = 0
+                    meanS_F2 = 0
+                    meanS_CR1 = 0
+                    meanS_CR2 = 0
+    
+                    for s in range(len(self.S_F)):
+                        meanS_F1 += (wS[s] / wSsum) * self.S_F[s] * self.S_F[s]
+                        meanS_F2 += (wS[s] / wSsum) * self.S_F[s]
+                        meanS_CR1 += (wS[s] / wSsum) * self.S_CR[s] * self.S_CR[s]
+                        meanS_CR2 += (wS[s] / wSsum) * self.S_CR[s]
+                    
+                    if meanS_F2 != 0.:
+                        self.M_F[k] = ((meanS_F1 / meanS_F2) + self.M_F[k]/2.)
+                    if meanS_CR2 != 0.:
+                        self.M_CR[k] = ((meanS_CR1 / meanS_CR2) + self.M_CR[k]/2.)
 
-                k += 1
-                if k >= self.H - 1:
-                    k = 0
+    
+                    k += 1
+                    if k >= self.H - 1:
+                        k = 0
                 
             self.NP = round(self.maxPopSize - (fes/self.maxFEs) * (self.maxPopSize - self.minPopSize))    
             self.P = self.resize(self.P, self.NP)
