@@ -50,6 +50,7 @@ class DISH:
         self.pMin = None
         self.pMax = None
 
+        self.history = []
 
     def getRandomInd(self, array, toRemove):
         popCopy = array[:]
@@ -140,6 +141,8 @@ class DISH:
             if best == None or ind.ofv <= best.ofv:
                 best = ind
 
+        self.history = [best]
+
         #maxfes exhaustion
         while fes < self.maxFEs:
             G += 1
@@ -218,6 +221,7 @@ class DISH:
                     newPop.append(newInd)
                     if newInd.ofv <= best.ofv:
                         best = newInd
+                        self.history.append(best)
                     self.S_F.append(Fg)
                     self.S_CR.append(CRg)
                     self.Aext.append(original)
@@ -226,7 +230,7 @@ class DISH:
                     newPop.append(original)
 
                 if fes >= self.maxFEs:
-                    return best
+                    return best, self.history
 
                 if len(self.Aext) > self.NP:
                     self.resizeAext()
@@ -265,7 +269,7 @@ class DISH:
             self.P = self.resize(self.P, self.NP)
             self.resizeAext()
 
-        return best
+        return best, self.history
 
 dim = 10 #dimension size
 NP = round(25 * math.log(dim) * math.sqrt(dim)) #population size
@@ -275,5 +279,6 @@ minPopSize = 4
 
 sphere = Sphere(dim) #defined test function
 de = DISH(dim, maxFEs, sphere, H, NP, minPopSize)
-resp = de.run()
-print(resp)
+best, history = de.run()
+print(best)
+print(history)
