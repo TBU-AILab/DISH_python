@@ -159,7 +159,7 @@ class DISH:
                 r = random.randint(0, self.H -1)
                 Fg = cauchy.rvs(loc=self.M_F[r], scale=0.1, size=1)[0]
                 while(Fg <= 0):
-                    Fg = cauchy.rvs(loc=self.M_CR[r], scale=0.1, size=1)[0]
+                    Fg = cauchy.rvs(loc=self.M_F[r], scale=0.1, size=1)[0]
                 if(Fg > 1):
                     Fg = 1
 
